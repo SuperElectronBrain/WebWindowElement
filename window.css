@@ -1,0 +1,196 @@
+.window {
+    --padding: 10px;
+    --margin: 0px;
+    --border: 1px;
+    --width: 200px;
+    --height: 200px;
+    --left: calc(50vw - (var(--width) / 2));
+    --top: calc(50vh - (var(--height) / 2));
+    --btn-height: 30px;
+    --btn-top: 10px;
+    --resize-thick: 5px;
+}
+
+.window {
+    position: fixed;
+    width: calc(var(--width)  - (2 * var(--padding)) - (2 * var(--margin)) - (2 * var(--border)));
+    height: calc(var(--height) - (2 * var(--padding)) - (2 * var(--margin)) - (2 * var(--border)));
+    left: min(max(var(--left), calc(min(var(--width) * -1, 0px) + (2 * var(--border)))), calc(100vw - 1px));
+    top: min(max(var(--top), calc((var(--btn-height) + (var(--btn-top, 10px) * 2)) * -1)), calc(100vh - 1px));
+    padding: var(--padding);
+    margin: var(--margin);
+    border: var(--border) solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px #00000026;
+
+    opacity: 1;
+    transition: width var(--delay-width, 0.3s) ease, height var(--delay-height, 0.3s) ease, 
+                left var(--delay-left, 0.3s) ease, top var(--delay-top, 0.3s) ease, 
+                opacity 0.3s ease, visibility 0s var(--delay-visibility, 0s);
+}
+
+.window.maximize{
+    --width:100vw !important;
+    --height:100vh !important;
+    --left: calc(50vw - (var(--width, 200px) / 2)) !important;
+    --top: calc(50vh - (var(--height, 200px) / 2)) !important;
+}
+
+.window.hide{
+    --width: 0vw !important;
+    --height: 0vw !important;
+    opacity: 0;
+    visibility: hidden;
+    --delay-visibility:0.3s;
+}
+
+.window.drag,
+.window.resize{
+    --delay-left:0.0s;
+    --delay-top:0.0s;
+    --delay-width:0.0s;
+    --delay-height:0.0s;
+}
+
+
+.window > .close-btn,
+.window > .size-btn,
+.window > .hide-btn{
+    width: var(--btn-height, 30px);
+    height: var(--btn-height, 30px);
+    position:absolute;
+    right: var(--right, 10px);
+    top: var(--btn-top, 10px);
+    border: none;
+    border-radius:10px;
+    background-color: transparent;
+    background-image: var(--image, url("/resources/image/cross.svg"));
+    background-size: cover;
+    background-position: center;
+}
+.window.draggable > .handle{
+    width: 100%;
+    height: calc(var(--btn-height, 30px) + (var(--btn-top, 10px) * 2));
+    position:absolute;
+    left: 0;
+    top: 0;
+}
+
+.window > .close-btn.active,
+.window > .size-btn.active,
+.window > .hide-btn.active{
+    background-color: buttonhighlight;
+}
+@media not (pointer: coarse) {
+    .window > .close-btn:hover,
+    .window > .size-btn:hover,
+    .window > .hide-btn:hover{
+        background-color: buttonhighlight;
+    }
+}
+
+.window > .close-btn{
+    --right: 10px;
+    --image: url("/resources/image/cross.svg");
+}
+
+.window > .size-btn{
+    --right: calc(var(--btn-height, 30px) + 20px);
+    --image: url("/resources/image/maximize.svg");
+}
+
+.window > .hide-btn{
+    --right: calc((var(--btn-height, 30px) * 2) + 30px);
+    --image: url("/resources/image/horizontal-bar.svg");
+}
+
+.window.maximize > .size-btn{
+    --image: url("/resources/image/minimize.svg");
+}
+
+.window:not(.resizable) > .handle,
+.window:not(.resizable) > .handle-top,
+.window:not(.resizable) > .handle-bottom,
+.window:not(.resizable) > .handle-left,
+.window:not(.resizable) > .handle-right,
+.window:not(.resizable) > .handle-nw,
+.window:not(.resizable) > .handle-ne,
+.window:not(.resizable) > .handle-sw,
+.window:not(.resizable) > .handle-se{
+    position:fixed;
+    width: 0;
+    height: 0;
+    left: 0;
+    top: 0;
+    display: none;
+    visibility: hidden;
+}
+
+.window.resizable > .handle-top,
+.window.resizable > .handle-bottom,
+.window.resizable > .handle-left,
+.window.resizable > .handle-right,
+.window.resizable > .handle-nw,
+.window.resizable > .handle-ne,
+.window.resizable > .handle-sw,
+.window.resizable > .handle-se{
+    position:absolute;
+}
+
+.window.resizable > .handle-top,
+.window.resizable > .handle-bottom{
+    width: 100%;
+    height: var(--resize-thick);
+    left: 0;
+    cursor: n-resize;
+}
+
+.window.resizable > .handle-left,
+.window.resizable > .handle-right{
+    width: var(--resize-thick);
+    height: 100%;
+    top: 0;
+    cursor: e-resize;
+}
+
+.window.resizable > .handle-nw,
+.window.resizable > .handle-ne,
+.window.resizable > .handle-sw,
+.window.resizable > .handle-se{
+    width: var(--resize-thick);
+    height: var(--resize-thick);
+}
+
+.window.resizable > .handle-nw{
+    cursor: nw-resize;
+}
+.window.resizable > .handle-ne{
+    cursor: ne-resize;
+}
+.window.resizable > .handle-sw{
+    cursor: sw-resize;
+}
+.window.resizable > .handle-se{
+    cursor: se-resize;
+}
+
+.window.resizable > .handle-top,
+.window.resizable > .handle-nw,
+.window.resizable > .handle-ne{
+    top: calc(var(--border) * -1);
+}
+.window.resizable > .handle-bottom,
+.window.resizable > .handle-sw,
+.window.resizable > .handle-se{
+    top: calc((100% - var(--resize-thick)) + var(--border));
+}
+.window.resizable > .handle-left,
+.window.resizable > .handle-nw,
+.window.resizable > .handle-sw{
+    left: calc(var(--border) * -1);
+}
+.window.resizable > .handle-right,
+.window.resizable > .handle-ne,
+.window.resizable > .handle-se{
+    left: calc((100% - var(--resize-thick)) + var(--border));
+}
